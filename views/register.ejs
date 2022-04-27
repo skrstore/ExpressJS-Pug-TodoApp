@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head.ejs', {title: "Register"}) -%>
+  <body>
+    <%- include('navbar') %>
+
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div
+          class="col-10 col-sm-8 col-md-6 col-lg-4 bg-white shadow rounded pt-5 px-2"
+        >
+          <h2 class="text-center">Register, here</h2>
+
+          <div class="p-3">
+            <form method="post">
+              <div class="form-group">
+                <label for="name">Name : </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="name"
+                  id="name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">Email : </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  id="email"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="password">Password : </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  id="password"
+                  required
+                />
+              </div>
+              <div class="form-group text-center pt-4">
+                <button type="submit" class="btn btn-outline-success">
+                  Register
+                </button>
+              </div>
+              <div class="pt-3">
+                <p>
+                  Already have a account, <a href="/user/login/">Login Here</a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('vendor_scripts') -%>
+  </body>
+</html>
