@@ -1,0 +1,22 @@
+doctype html
+html
+    head
+        title Note - #{data.title}
+        link(rel="stylesheet", href="../styles/main.css")
+    body
+        div.container
+            div.note
+                h2 Title : #{data.title}
+                p ID : #{data._id}
+                p Created At : #{data.createdAt}
+                p Updated At : #{data.updatedAt}
+                p 
+                    button.btn-edit Edit
+        script(type="text/javascript").
+            let data = {
+                _id : "#{data._id}",
+                title : "#{data.title}",
+                createdAt: "#{data.createdAt}",
+                updatedAt: "#{data.updatedAt}"
+            }
+        script(src="../scripts/editForm.js")

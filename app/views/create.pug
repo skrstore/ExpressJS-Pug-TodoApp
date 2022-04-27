@@ -1,0 +1,12 @@
+doctype html
+html
+    head
+        title= title
+        link(rel="stylesheet", href="styles/main.css")
+    body
+        h1 Create New Note
+        form(action="/note", method="post")
+            p Title : 
+                input(type="text" name="title")
+            p 
+                input(type="submit", value="Submit")

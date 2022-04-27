@@ -1,0 +1,17 @@
+doctype html
+html
+    head
+        title All Notes
+        link(rel="stylesheet", href="styles/main.css")
+    body
+        div.notes
+            - 
+            each note in notes
+                div.note
+                    h2 Title : #{note.title}
+                    p ID : #{note._id}
+                    - let link = "notes/" + note._id;
+                    a(href=link) View
+                    | 
+                    button.btn-delete(data-noteId = note._id) Delete
+        script(src="scripts/main.js")
