@@ -1,11 +1,11 @@
 doctype html
 html
     head
-        title Note - #{data.title}
-        link(rel="stylesheet", href="../styles/main.css")
+        title Todo - #{data.title}
+        link(rel="stylesheet", href="/main.css")
     body
         div.container
-            div.note
+            div.todo
                 h2 Title : #{data.title}
                 p ID : #{data._id}
                 p Created At : #{data.createdAt}
@@ -19,4 +19,4 @@ html
                 createdAt: "#{data.createdAt}",
                 updatedAt: "#{data.updatedAt}"
             }
-        script(src="../scripts/editForm.js")
+        script(src="/main.js")

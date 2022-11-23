@@ -1,30 +1,34 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const dbConfig = require('./config/database.config.js');
+const config = {
+  MONGODB_URL:
+    process.env.MONGODB_URL || 'mongodb://admin:admin@localhost:27017/',
+  DB_NAME: process.env.DB_NAME || 'test',
+  PORT: process.env.PORT || 3000,
+};
 
-const app = express();
-const port = 3000;
+const main = async () => {
+  try {
+    const app = express();
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+    await mongoose.connect(config.MONGODB_URL, { dbName: config.DB_NAME });
+    console.log('[MongoDB] Connected');
 
-app.set('views', './src/app/views');
-app.set('view engine', 'pug');
+    app.use(express.urlencoded({ extended: true }));
+    app.set('views', './src/views/todo');
+    app.set('view engine', 'pug');
 
-mongoose
-  .connect(dbConfig.urlCloud, { dbName: 'test' })
-  .then(() => console.log('DB connected'))
-  .catch((err) => {
-    console.log(`${err.name}\nDB not connected`);
-  });
+    app.use('/', express.static('./src/public'));
+    require('./apps/todo/todo.routes')(app);
 
-app.use('/', express.static('./src/app/public'));
+    app.listen(config.PORT, () => {
+      console.log(`[Server] Listening on ${config.PORT}`);
+    });
+  } catch (error) {
+    console.log('[Error]', error);
+    process.exit(1);
+  }
+};
 
-app.get('/create', (req, res) => {
-  res.render('create', { title: 'Create Note' });
-});
-
-require('./app/routes/note.routes')(app);
-
-app.listen(port, console.log(`Server running on Port ${port}!`));
+main();
