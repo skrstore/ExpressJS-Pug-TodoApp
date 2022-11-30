@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h2 User Lists
+  .userContainer
+    table
+      thead
+        tr
+          th Name
+          th Email
+          th Detail
+      tbody
+        each i in users
+          tr
+            td #{i.name}
+            td #{i.email}
+            td
+              a(href="/" + i._id) Detail

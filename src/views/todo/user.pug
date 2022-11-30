@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h2 User Detail : #{user.name}
+  .userDetail
+    p #{user.name}
+    p #{user.email}
+    p
+      a(href="/update/"+ user._id) Update
+    p
+      a(href="/delete/" + user._id) Delete
