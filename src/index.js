@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+// TODO: it dotenv needed(npm i dotenv)
+// require("dotenv").config();
+
 const config = {
   MONGODB_URL:
     process.env.MONGODB_URL || 'mongodb://admin:admin@localhost:27017/',
