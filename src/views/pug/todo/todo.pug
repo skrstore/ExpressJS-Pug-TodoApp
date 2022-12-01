@@ -1,22 +1,21 @@
-doctype html
-html
-    head
-        title Todo - #{data.title}
-        link(rel="stylesheet", href="/main.css")
-    body
-        div.container
-            div.todo
-                h2 Title : #{data.title}
-                p ID : #{data._id}
-                p Created At : #{data.createdAt}
-                p Updated At : #{data.updatedAt}
-                p 
-                    button.btn-edit Edit
-        script(type="text/javascript").
-            let data = {
-                _id : "#{data._id}",
-                title : "#{data.title}",
-                createdAt: "#{data.createdAt}",
-                updatedAt: "#{data.updatedAt}"
-            }
-        script(src="/main.js")
+extends parts/layout
+
+
+block content
+    h2 Home
+    div.container
+        div.todo
+            h2 Title : #{data.title}
+            p ID : #{data._id}
+            p Created At : #{data.createdAt}
+            p Updated At : #{data.updatedAt}
+            p 
+                button.btn.btn-primary Edit
+    a(href="/") Back
+    script(type="text/javascript").
+        let data = {
+            _id : "#{data._id}",
+            title : "#{data.title}",
+            createdAt: "#{data.createdAt}",
+            updatedAt: "#{data.updatedAt}"
+        }

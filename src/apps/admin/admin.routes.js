@@ -34,11 +34,13 @@ router.post('/login', (req, res) => {
 router.get('/dashboard', checkAdmin, (req, res) => {
   Todo.find()
     .populate('userId')
-    .then((result) => {
+    .then(async (result) => {
+      const users = await User.find({}, { __v: 0, password: 0 });
       let user = { email: req.session.email, isAdmin: true };
-      //   console.log(result);
       res.render('adminDashboard', {
         data: JSON.stringify(result),
+        todos: result,
+        users,
         user: user,
       });
     })

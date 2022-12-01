@@ -1,0 +1,23 @@
+extends parts/layout
+
+
+block content
+    h2 Home
+
+    h1 Create New Todo
+    form(action="/todo/addtodo", method="post")
+        p Title : 
+            input(type="text" name="todo")
+        p 
+            input(type="submit", value="Submit")
+
+    div
+        - 
+        each todo in todos
+            div
+                h2 Title : #{todo.title}
+                p ID : #{todo._id}
+                - let link = "todos/" + todo._id;
+                a(href=link) View
+                | 
+                button.btn-delete(data-todoId = todo._id) Delete

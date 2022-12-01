@@ -38,12 +38,12 @@ const config = {
     next();
   });
 
-  // app.set('views', './src/views/pug/todo');
-  // app.set('view engine', 'pug');
+  app.set('views', './src/views/pug/todo');
+  app.set('view engine', 'pug');
   // app.use('/', express.static('./src/public'));
 
-  app.set('view engine', 'ejs');
-  app.set('views', './src/views/ejs');
+  // app.set('view engine', 'ejs');
+  // app.set('views', './src/views/ejs');
 
   app.use('/', require('./apps/todo/todo.routes'));
   app.use('/todo', require('./apps/todo/todo.routes'));

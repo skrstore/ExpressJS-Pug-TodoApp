@@ -1,0 +1,35 @@
+extends parts/layout
+
+block content
+  h2 Todo List
+  .todosContainer
+    table
+      thead
+        tr
+          th Name
+          th Email
+          th Detail
+      tbody
+        each i in todos
+          tr
+            td #{i.title}
+            if i.userId
+              td #{i.userId}
+              //- td #{i.userId.name}
+            else
+              td Anonomous
+            td
+              a(href="/todos/" + i._id) Detail
+  
+  h2 Users List
+  .userContainer
+    table
+      thead
+        tr
+          th Name
+          th Detail
+      tbody
+        each i in users
+          tr
+            td #{i.name}
+            td #{i}

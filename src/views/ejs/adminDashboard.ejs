@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('head.ejs', {title: "Admin Dashboard"}) -%>
+  <%- include('parts/head.ejs', {title: "Admin Dashboard"}) -%>
   <body>
     <%- include('parts/navbar') %>
 
     <div class="container-fluid">
       <div class="row justify-content-center">
-        <div class="col-12 col-sm-10 col-md-8 col-lg-6">
-          <%- data %>
-        </div>
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6"><%- data %></div>
       </div>
     </div>
 
-    <%- include('vendor_scripts') -%>
+    <%- include('parts/vendor_scripts') -%>
   </body>
 </html>
