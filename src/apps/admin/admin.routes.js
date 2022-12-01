@@ -2,17 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
-const Todo = require('./../todo/todo.models');
-const User = require('./../user/user.models');
-
-function checkAdmin(req, res, next) {
-  if (req.session.email && req.session.isAdmin) {
-    next();
-  } else {
-    req.flash('info', 'You need to Login');
-    res.redirect('/admin/login');
-  }
-}
+const Todo = require('../todo/todo.models');
+const User = require('../user/user.models');
+const { checkAdmin } = require('../../middleware');
 
 router.get('/', (req, res) => {
   res.redirect('/admin/dashboard/');
@@ -45,7 +37,10 @@ router.get('/dashboard', checkAdmin, (req, res) => {
     .then((result) => {
       let user = { email: req.session.email, isAdmin: true };
       //   console.log(result);
-      res.render('adminDashboard', { data: result, user: user });
+      res.render('adminDashboard', {
+        data: JSON.stringify(result),
+        user: user,
+      });
     })
     .catch((err) => {
       console.log(err);

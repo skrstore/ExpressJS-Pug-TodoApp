@@ -3,15 +3,7 @@ const router = express.Router();
 
 const Todo = require('./todo.models');
 const User = require('./../user/user.models');
-
-function check_auth(req, res, next) {
-  if (req.session.email) {
-    next();
-  } else {
-    req.flash('info', 'You need to Login');
-    res.redirect('/user/login');
-  }
-}
+const { checkAuth } = require('./../../middleware');
 
 router.get('/create', (req, res) => {
   res.render('create', { title: 'Create Note' });
@@ -117,7 +109,7 @@ router.put('/todos/:todoId', (req, res) => {
 });
 
 // home
-router.get('/', check_auth, (req, res) => {
+router.get('/', checkAuth, (req, res) => {
   User.find({ email: req.session.email }).then((users) => {
     let userId = users[0]._id;
     Todo.find({ userId: userId })
@@ -132,7 +124,7 @@ router.get('/', check_auth, (req, res) => {
 });
 
 // add new todo
-router.post('/addtodo', check_auth, (req, res) => {
+router.post('/addtodo', checkAuth, (req, res) => {
   User.find({ email: req.session.email }).then((users) => {
     let userId = users[0]._id;
 
@@ -145,7 +137,7 @@ router.post('/addtodo', check_auth, (req, res) => {
 });
 
 // update todo get
-router.get('/update/:id', check_auth, (req, res) => {
+router.get('/update/:id', checkAuth, (req, res) => {
   Todo.findById(req.params.id)
     .then((result) => {
       let user = { email: req.session.email };
@@ -157,7 +149,7 @@ router.get('/update/:id', check_auth, (req, res) => {
 });
 
 // update todo post
-router.post('/update/:id', check_auth, (req, res) => {
+router.post('/update/:id', checkAuth, (req, res) => {
   Todo.findByIdAndUpdate(req.params.id, { title: req.body.todo }).then(
     (result) => {
       res.redirect('/');
@@ -166,7 +158,7 @@ router.post('/update/:id', check_auth, (req, res) => {
 });
 
 // delete todo
-router.get('/delete/:id', check_auth, (req, res) => {
+router.get('/delete/:id', checkAuth, (req, res) => {
   Todo.findOneAndDelete({ _id: req.params.id }).then((result) => {
     res.redirect('/');
   });

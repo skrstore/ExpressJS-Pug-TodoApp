@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('head.ejs', {title: "Update Todo"}) -%>
+    <%- include('parts/head.ejs', {title: "Update Todo"}) -%>
   </head>
   <body>
-    <%- include('navbar') %>
+    <%- include('parts/navbar') %>
 
     <div class="container">
       <div class="container mt-5">
         <form method="POST" class="form-inline">
           <div class="form-group">
-            <label for="updatetodo">
-              Update Todo :
-            </label>
+            <label for="updatetodo"> Update Todo : </label>
             <input
               type="text"
               id="updatetodo"

@@ -45,17 +45,16 @@ const config = {
   app.set('view engine', 'ejs');
   app.set('views', './src/views/ejs');
 
+  app.use('/', require('./apps/todo/todo.routes'));
+  app.use('/todo', require('./apps/todo/todo.routes'));
+  app.use('/user', require('./apps/user/user.routes'));
+  app.use('/admin', require('./apps/admin/admin.routes'));
+
   // app.get('/', (req, res) => {
   //   res.redirect('/todo');
   // });
-
+  // TRY
   require('./apps/try/try.controller')(app);
-
-  app.use('/', require('./apps/todo/todo.routes'));
-  app.use('/todo', require('./apps/todo/todo.routes'));
-
-  app.use('/user', require('./apps/user/user'));
-  app.use('/admin', require('./apps/admin/admin'));
 
   // to handle invalid requests
   app.use((req, res) => {
