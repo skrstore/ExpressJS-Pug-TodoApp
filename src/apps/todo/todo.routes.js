@@ -1,106 +1,175 @@
+const express = require('express');
+const router = express.Router();
+
 const Todo = require('./todo.models');
+const User = require('./../user/user.models');
 
-module.exports = (app) => {
-  app.get('/create', (req, res) => {
-    res.render('create', { title: 'Create Note' });
-  });
+function check_auth(req, res, next) {
+  if (req.session.email) {
+    next();
+  } else {
+    req.flash('info', 'You need to Login');
+    res.redirect('/user/login');
+  }
+}
 
-  app.post('/todo', async (req, res) => {
-    try {
-      const todo = new Todo({
-        title: req.body.title,
-        detail: req.body.detail || '',
+router.get('/create', (req, res) => {
+  res.render('create', { title: 'Create Note' });
+});
+
+router.post('/todo', async (req, res) => {
+  try {
+    const todo = new Todo({
+      title: req.body.title,
+      detail: req.body.detail || '',
+    });
+
+    const savedTodo = await todo.save();
+    res.render('todo', { data: savedTodo });
+  } catch (error) {
+    res.status(500).send({ message: error.message, status: 'fail' });
+  }
+});
+
+router.get('/todos', async (req, res) => {
+  try {
+    const todos = await Todo.find();
+    res.render('todos', { todos: todos });
+  } catch (error) {
+    res.status(500).send({ message: error.message, status: 'fail' });
+  }
+});
+
+router.get('/todos/:todoId', async (req, res) => {
+  const { todoId } = req.params;
+  try {
+    const existingTodo = await Todo.findById(todoId);
+
+    if (!existingTodo) {
+      return res.status(404).send({
+        message: 'Todo not found with id ' + todoId,
+        status: 'fail',
       });
-
-      const savedTodo = await todo.save();
-      res.render('todo', { data: savedTodo });
-    } catch (error) {
-      res.status(500).send({ message: error.message, status: 'fail' });
     }
-  });
-
-  app.get('/todos', async (req, res) => {
-    try {
-      const todos = await Todo.find();
-      res.render('todos', { todos: todos });
-    } catch (error) {
-      res.status(500).send({ message: error.message, status: 'fail' });
+    res.render('todo', { data: existingTodo });
+  } catch (error) {
+    if (error.kind === 'ObjectId') {
+      return res.status(404).send({
+        message: 'Invalid Id: ' + todoId,
+        status: 'fail',
+      });
     }
-  });
+    res.status(500).send({ message: error.message, status: 'fail' });
+  }
+});
 
-  app.get('/todos/:todoId', async (req, res) => {
-    const { todoId } = req.params;
-    try {
-      const existingTodo = await Todo.findById(todoId);
-
-      if (!existingTodo) {
+router.delete('/todos/:todoId', (req, res) => {
+  const { todoId } = req.params;
+  Todo.findByIdAndRemove(todoId)
+    .then((todo) => {
+      if (!todo) {
         return res.status(404).send({
           message: 'Todo not found with id ' + todoId,
-          status: 'fail',
         });
       }
-      res.render('todo', { data: existingTodo });
-    } catch (error) {
-      if (error.kind === 'ObjectId') {
+      res.send({ message: 'Todo deleted successfully!' });
+    })
+    .catch((err) => {
+      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({
-          message: 'Invalid Id: ' + todoId,
-          status: 'fail',
+          message: 'Todo not found with id ' + todoId,
         });
       }
-      res.status(500).send({ message: error.message, status: 'fail' });
+      return res.status(500).send({
+        message: 'Could not delete todo with id ' + todoId,
+      });
+    });
+});
+
+router.put('/todos/:todoId', (req, res) => {
+  const { todoId } = req.params;
+  // Find todo and update it with the request body
+  Todo.findByIdAndUpdate(
+    todoId,
+    {
+      title: req.body.title || 'Untitled Todo',
+    },
+    { new: true }
+  )
+    .then((todo) => {
+      if (!todo) {
+        return res.status(404).send({
+          message: 'Todo not found with id ' + todoId,
+        });
+      }
+      res.send(todo);
+    })
+    .catch((err) => {
+      if (err.kind === 'ObjectId') {
+        return res.status(404).send({
+          message: 'Todo not found with id ' + todoId,
+        });
+      }
+      return res.status(500).send({
+        message: 'Error updating Todo with id ' + todoId,
+      });
+    });
+});
+
+// home
+router.get('/', check_auth, (req, res) => {
+  User.find({ email: req.session.email }).then((users) => {
+    let userId = users[0]._id;
+    Todo.find({ userId: userId })
+      .then((result) => {
+        let user = { email: req.session.email };
+        res.render('home', { todos: result, user: user });
+      })
+      .catch((err) => {
+        res.send('Error Occured');
+      });
+  });
+});
+
+// add new todo
+router.post('/addtodo', check_auth, (req, res) => {
+  User.find({ email: req.session.email }).then((users) => {
+    let userId = users[0]._id;
+
+    let todo1 = new Todo({ title: req.body.todo, userId: userId });
+
+    todo1.save().then((result) => {
+      res.redirect('/');
+    });
+  });
+});
+
+// update todo get
+router.get('/update/:id', check_auth, (req, res) => {
+  Todo.findById(req.params.id)
+    .then((result) => {
+      let user = { email: req.session.email };
+      res.render('update', { data: result, user: user });
+    })
+    .catch((err) => {
+      res.send('Error Occured');
+    });
+});
+
+// update todo post
+router.post('/update/:id', check_auth, (req, res) => {
+  Todo.findByIdAndUpdate(req.params.id, { title: req.body.todo }).then(
+    (result) => {
+      res.redirect('/');
     }
-  });
+  );
+});
 
-  app.delete('/todos/:todoId', (req, res) => {
-    const { todoId } = req.params;
-    Todo.findByIdAndRemove(todoId)
-      .then((todo) => {
-        if (!todo) {
-          return res.status(404).send({
-            message: 'Todo not found with id ' + todoId,
-          });
-        }
-        res.send({ message: 'Todo deleted successfully!' });
-      })
-      .catch((err) => {
-        if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-          return res.status(404).send({
-            message: 'Todo not found with id ' + todoId,
-          });
-        }
-        return res.status(500).send({
-          message: 'Could not delete todo with id ' + todoId,
-        });
-      });
+// delete todo
+router.get('/delete/:id', check_auth, (req, res) => {
+  Todo.findOneAndDelete({ _id: req.params.id }).then((result) => {
+    res.redirect('/');
   });
+});
 
-  app.put('/todos/:todoId', (req, res) => {
-    const { todoId } = req.params;
-    // Find todo and update it with the request body
-    Todo.findByIdAndUpdate(
-      todoId,
-      {
-        title: req.body.title || 'Untitled Todo',
-      },
-      { new: true }
-    )
-      .then((todo) => {
-        if (!todo) {
-          return res.status(404).send({
-            message: 'Todo not found with id ' + todoId,
-          });
-        }
-        res.send(todo);
-      })
-      .catch((err) => {
-        if (err.kind === 'ObjectId') {
-          return res.status(404).send({
-            message: 'Todo not found with id ' + todoId,
-          });
-        }
-        return res.status(500).send({
-          message: 'Error updating Todo with id ' + todoId,
-        });
-      });
-  });
-};
+module.exports = router;
