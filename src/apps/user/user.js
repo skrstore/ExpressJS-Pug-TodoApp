@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-const SendMail = require("./../middlewares/sendmail");
-
 const User = require("./../models/user");
 
 // to send register page

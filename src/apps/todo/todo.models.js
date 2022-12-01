@@ -9,6 +9,11 @@ const todoSchema = new mongoose.Schema(
     detail: {
       type: String,
     },
+    userId: {
+      type: mongoose.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   { timestamps: true }
 );
