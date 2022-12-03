@@ -1,7 +1,8 @@
 const express = require('express');
-const router = express.Router();
 
-const User = require('./user.models');
+const { post } = require('../../services/api');
+
+const router = express.Router();
 
 // to send register page
 router.get('/register', (req, res) => {
@@ -9,32 +10,12 @@ router.get('/register', (req, res) => {
 });
 
 // to add new user
-router.post('/register', (req, res) => {
-  // console.log(req.body);
-  const { email, password, name } = req.body;
-  if (name && email && password) {
-    User.find({ email }).then((users) => {
-      if (users.length === 0) {
-        User.create({ email, password, name })
-          .then((result) => {
-            // console.log("User Addeded", result);
-            req.flash('info', 'User Registered Successfully');
-            res.redirect('/user/login');
-          })
-          .catch((err) => {
-            // console.log("Error : ", err);
-            req.flash('info', 'Error Occured During Registration');
-            res.redirect('/user/register');
-          });
-      } else {
-        req.flash('info', 'Email Already Registered');
-        res.redirect('/user/register');
-      }
-    });
-  } else {
-    req.flash('info', 'Name, email or password is Invalid');
-    res.redirect('/user/register');
-  }
+router.post('/register', async (req, res) => {
+  const { email, password, username } = req.body;
+  await post('auth/register', { username, email, password });
+
+  req.flash('info', 'User Registered Successfully');
+  res.redirect('/user/login');
 });
 
 // to send login page
@@ -43,24 +24,18 @@ router.get('/login', (req, res) => {
 });
 
 // to login the user after checking email and password
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  User.findOne({ email, password }).then((result) => {
-    // console.log(result);
-    if (result) {
-      req.session.email = email;
-      req.flash('info', 'Login Success');
-      res.redirect('/');
-    } else {
-      req.flash('info', 'Email or Password is Incorrect');
-      res.redirect('/user/login');
-    }
-  });
+  const response = await post('auth/login', { email, password });
+
+  req.session.token = response.data.data.token;
+  req.session.email = response.data.data.user.email;
+  req.flash('info', 'Login Success');
+  res.redirect('/');
 });
 
 // to destroy the session
 router.get('/logout', (req, res) => {
-  // delete req.session.email
   req.session.destroy(() => {
     res.redirect('/user/login');
   });

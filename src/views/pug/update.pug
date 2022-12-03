@@ -1,0 +1,9 @@
+extends parts/layout
+
+block content
+  h2 Update Todo Detail
+  form(method="post")
+    p Update todo : 
+        input(type="text" name="todo" value=data.title)
+    p 
+        input.btn.btn-primary(type="submit", value="Submit")

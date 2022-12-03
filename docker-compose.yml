@@ -9,3 +9,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
+  server:
+    image: skrmain/expressjs-todo-api:0.2
+    ports:
+      - 8000:8000
+    environment:
+      - MONGODB_URL=mongodb://admin:admin@mongo:27017/

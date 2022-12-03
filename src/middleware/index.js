@@ -1,5 +1,5 @@
 function checkAuth(req, res, next) {
-  if (req.session.email) {
+  if (req.session.token) {
     next();
   } else {
     req.flash('info', 'You need to Login');
