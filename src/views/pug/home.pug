@@ -1,0 +1,24 @@
+extends parts/layout
+
+
+block content
+    h2 Create New Todo
+    form(action="/todo/addtodo", method="post")
+        p Title : 
+            input(type="text" name="todo")
+        p 
+            input.btn.btn-primary(type="submit", value="Submit")
+
+    div
+        hr
+        h2 Todo List
+        - 
+        each todo in todos
+            div
+                p #{todo.title}
+                - let editLink = "todo/update/" + todo._id;
+                a.btn.btn-success(href=editLink) Edit
+                |
+                - let deleteLink = "todo/delete/" + todo._id;
+                a.btn.btn-delete(href=deleteLink) Delete
+            hr
