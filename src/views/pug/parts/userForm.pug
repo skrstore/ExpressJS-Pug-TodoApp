@@ -1,7 +1,0 @@
-form(action="", method="post")
-  p Name :
-    input(type="text", name="name" value=user?user.name: '' required)
-  p Email :
-    input(type="email", name="email" value=user?user.email: '' required)
-  p
-    input(type="submit", value=user?"Update": "Add")

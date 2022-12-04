@@ -7,4 +7,4 @@ function checkAuth(req, res, next) {
   }
 }
 
-module.exports = { checkAdmin, checkAuth };
+module.exports = { checkAuth };
