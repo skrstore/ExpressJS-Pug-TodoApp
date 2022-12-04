@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const SNEDER_MAIL = process.env.SNEDER_MAIL || "skrwebstart@gmail.com";
+const SNEDER_MAIL = process.env.SNEDER_MAIL;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 
 const transport = nodemailer.createTransport({

@@ -7,13 +7,4 @@ function checkAuth(req, res, next) {
   }
 }
 
-function checkAdmin(req, res, next) {
-  if (req.session.email && req.session.isAdmin) {
-    next();
-  } else {
-    req.flash('info', 'You need to Login');
-    res.redirect('/admin/login');
-  }
-}
-
 module.exports = { checkAdmin, checkAuth };

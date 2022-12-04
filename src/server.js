@@ -31,10 +31,6 @@ app.set('views', `./src/views/${viewEngine}`);
 app.get('/', (req, res) => res.redirect('/todo'));
 app.use('/todo', require('./apps/todo/todo.routes'));
 app.use('/user', require('./apps/user/user.routes'));
-app.use('/admin', require('./apps/admin/admin.routes'));
-
-// TRY
-require('./apps/try/try.controller')(app);
 
 // to handle invalid requests
 app.use((req, res) => res.status(404).send('Invalid Request'));
