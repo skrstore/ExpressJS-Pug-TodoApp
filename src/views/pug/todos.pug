@@ -3,7 +3,7 @@ extends parts/layout
 
 block content
     h2 Create New Todo
-    form(action="/todo/addtodo", method="post")
+    form(method="post")
         p Title : 
             input(type="text" name="todo")
         p 
@@ -12,13 +12,14 @@ block content
     div
         hr
         h2 Todo List
+        hr
         - 
         each todo in todos
             div
                 p #{todo.title}
                 - let editLink = "todo/update/" + todo._id;
-                a.btn.btn-success(href=editLink) Edit
+                a.btn.btn-outline-success(href=editLink) Edit
                 |
                 - let deleteLink = "todo/delete/" + todo._id;
-                a.btn.btn-delete(href=deleteLink) Delete
+                a.btn.btn-outline-danger(href=deleteLink) Delete
             hr
