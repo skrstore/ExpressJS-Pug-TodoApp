@@ -2,8 +2,10 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('express-flash');
 
+const { checkAuth } = require('./middleware');
+
 const app = express();
-const viewEngine = 'pug'; // 'pug' || 'ejs';
+const viewEngine = 'ejs'; // 'pug' || 'ejs';
 
 // for session
 app.use(
@@ -29,8 +31,8 @@ app.set('view engine', viewEngine);
 app.set('views', `./src/views/${viewEngine}`);
 
 app.get('/', (req, res) => res.redirect('/todo'));
-app.use('/todo', require('./apps/todo/todo.routes'));
-app.use('/user', require('./apps/user/user.routes'));
+app.use('/todo', checkAuth, require('./apps/todo/todo.routes'));
+app.use('/auth', require('./apps/auth/auth.routes'));
 
 // to handle invalid requests
 app.use((req, res) => res.status(404).send('Invalid Request'));

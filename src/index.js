@@ -1,5 +1,8 @@
 const { app } = require('./server');
 
+// TODO: Setup prettier, ESLint, editorconfig
+// TODO: Update Login, Register Forms
+// TODO: Update API Request Methods Name
 // TODO: it dotenv needed(npm i dotenv)
 // require("dotenv").config();
 

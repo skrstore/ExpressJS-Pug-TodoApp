@@ -9,7 +9,7 @@
         <div class="col-12 col-sm-10 col-md-8 col-lg-6">
           <!-- todo adding form -->
           <div class="pt-3">
-            <form action="/todo/addtodo" method="POST">
+            <form method="POST">
               <div class="row align-items-center">
                 <div class="input-group input-group-lg col-10">
                   <input
@@ -27,7 +27,7 @@
                     class="btn btn-primary p-0 rounded-circle px-1"
                     title="Add"
                   >
-                    <span class="material-icons mt-1" style="font-size: 2.5em;">
+                    <span class="material-icons mt-1" style="font-size: 2.5em">
                       add
                     </span>
                   </button>
@@ -53,14 +53,18 @@
                     class="btn btn-light btn-sm"
                     title="Delete"
                   >
-                    <span class="material-icons pt-1" style="color: red;"> delete </span>
+                    <span class="material-icons pt-1" style="color: red">
+                      delete
+                    </span>
                   </a>
                   <a
                     href="/todo/update/<%- todo._id %>"
                     class="btn btn-light btn-sm"
                     title="Edit"
                   >
-                    <span class="material-icons pt-1" style="color: green;"> create </span>
+                    <span class="material-icons pt-1" style="color: green">
+                      create
+                    </span>
                   </a>
                 </div>
               </div>

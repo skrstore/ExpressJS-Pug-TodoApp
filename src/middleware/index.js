@@ -3,7 +3,7 @@ function checkAuth(req, res, next) {
     next();
   } else {
     req.flash('info', 'You need to Login');
-    res.redirect('/user/login');
+    res.redirect('/auth/login');
   }
 }
 

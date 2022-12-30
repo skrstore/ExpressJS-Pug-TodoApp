@@ -4,8 +4,8 @@ extends parts/layout
 block content
     h2 Register
     form(method="post")
-        p Name :
-            input(type="text", name="name" value=user?user.name: '' required)
+        p Username :
+            input(type="text", name="username" value=user?user.name: '' required)
         p Email :
             input(type="email", name="email" value=user?user.email: '' required)
         p Password :
@@ -15,4 +15,4 @@ block content
     
     div
         p Already have a account, 
-            a(href="/user/login/") Login Here
+            a(href="/auth/login/") Login Here
